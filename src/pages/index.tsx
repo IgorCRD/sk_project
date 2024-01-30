@@ -1,11 +1,31 @@
+import React from "react";
 import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
+import Link from "next/link";
+import { CommunityCard } from "@/components/CommunityCard";
+import { Group } from "@/models/group";
+import { NextPageContext } from "next";
+import { getDiscoveryGroups } from "@/dataFetchers/api";
+import { Footer } from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+export async function getServerSideProps(context: NextPageContext) {
+  const discovery = await getDiscoveryGroups();
+
+  return { props: { groups: discovery.pageProps.groups } };
+}
+
+interface HomeProps {
+  groups: Array<{
+    group: Group;
+    rank: number;
+  }>;
+}
+
+export default function Home({ groups }: HomeProps) {
   return (
     <>
       <Head>
@@ -16,98 +36,47 @@ export default function Home() {
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
         <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>src/pages/index.tsx</code>
-          </p>
           <div>
             <a
               href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
               target="_blank"
               rel="noopener noreferrer"
             >
-              By{" "}
+              By future{" "}
               <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
+                src="/skool.svg"
+                alt="Skool Logo"
+                className={styles.skoolLogo}
                 width={100}
                 height={24}
                 priority
               />
+              er
             </a>
           </div>
         </div>
 
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
+        <div className={`${styles.discoveryCards}`}>
+          {groups.map((groupItem) => {
+            const group = groupItem.group;
+            return (
+              <Link href={`/${groupItem.group.name}`} key={groupItem.group.id}>
+                <CommunityCard
+                  id={groupItem.group.name}
+                  title={group.metadata.displayName}
+                  logo={group.metadata.logoUrl}
+                  headerImg={group.metadata.coverSmallUrl}
+                  description={group.metadata.description}
+                  accessType={group.metadata.lpAccessType}
+                  numberOfMembers={group.metadata.totalMembers}
+                  isPublic={group.metadata.public}
+                />
+              </Link>
+            );
+          })}
         </div>
 
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
-        </div>
+        <Footer />
       </main>
     </>
   );

@@ -1,0 +1,67 @@
+.communityPage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 337px;
+  height: 382px;
+  border-radius: 10px;
+  border: 1px solid rgb(228, 228, 228);
+  background: rgb(255, 255, 255);
+  overflow: hidden;
+  transition: bottom, right, box-shadow 0.2s;
+}
+
+@media (prefers-color-scheme: dark) {
+  .communityPage {
+    background: rgb(50, 50, 50);
+  }
+}
+
+.communityPage:hover {
+  bottom: 1px;
+  right: 1px;
+  box-shadow: gray 2px 2px 5px 0px;
+}
+
+.communityPage:active {
+  bottom: 0px;
+  right: 0px;
+  box-shadow: gray 0px 0px 0px 0px;
+}
+
+.header {
+  position: relative;
+  width: 100%;
+  height: 178px;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  box-shadow: grey 0px -10px 20px 0px;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  flex-grow: 1;
+}
+
+.titleSection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.about {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+}
